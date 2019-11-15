@@ -38,6 +38,11 @@ public class SCR_Action : MonoBehaviour {
 	private float changeColorInterval = 0;
 	
 	private void Start() {
+		Application.targetFrameRate = 60;
+#if UNITY_STANDALONE_WIN
+		Screen.SetResolution(540, 960, false);
+#endif
+
 		SCR_Pool.Flush();
 		
 		instance = this;
