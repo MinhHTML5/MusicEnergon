@@ -5,9 +5,9 @@ using UnityEngine;
 
 
 public class SCR_Ball : MonoBehaviour {
-	public const float SPEED_X_MULTIPLIER = 0.3f;
+	public const float SPEED_X_MULTIPLIER = 0.4f;
 	public const float MAX_X = 2;
-	public const float MIN_STEP = 0.1f;
+	public const float MIN_STEP = 0.01f;
 	
 	public float x;
 	public float targetX;
@@ -21,6 +21,11 @@ public class SCR_Ball : MonoBehaviour {
     }
 	
 	public void SetColor (Color color) {
+		if (ps1 == null) {
+			ps1 = GetComponent<ParticleSystem>();
+			ps2 = transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
+		}
+		
 		var main = ps1.main;
 		main.startColor = color;
 		main = ps2.main;

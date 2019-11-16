@@ -47,7 +47,7 @@ public class SCR_Action : MonoBehaviour {
 		
 		instance = this;
 		
-		planes = new GameObject[5];
+		planes = new GameObject[4];
 		for (int i=0; i<planes.Length; i++) {
 			planes[i] = SCR_Pool.GetFreeObject (PFB_Plane);
 			planes[i].transform.position = new Vector3(0, PLANE_Y, PLANE_LENGTH * i);
@@ -144,7 +144,7 @@ public class SCR_Action : MonoBehaviour {
     }
 	
 	private void ApplyColor() {
-		MAT_Cube.SetColor("_EmissionColor", currentColor); 
+		MAT_Cube.SetColor("_Color", currentColor); 
 		
 		ball.GetComponent<SCR_Ball>().SetColor (currentColor);
 		
@@ -155,7 +155,7 @@ public class SCR_Action : MonoBehaviour {
 	}
 	
 	public void ChangePlaneColor(Color color) {
-		MAT_Plane.SetColor("_EmissionColor", color); 
+		MAT_Plane.SetColor("_Color", color); 
 	}
 	
 	private void PickRandomColor() {
