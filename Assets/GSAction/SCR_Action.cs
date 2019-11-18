@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SCR_Action : MonoBehaviour {
-	public const float CONTROL_AMPLIFIER = 10;
 	public const float PLANE_Y = -0.5f;
 	public const float PLANE_LENGTH = 100;
 	public const float SPEED_Z = 15;
@@ -76,13 +75,6 @@ public class SCR_Action : MonoBehaviour {
 			if (planes[i].transform.position.z < -PLANE_LENGTH) {
 				planes[i].transform.position = new Vector3(0, PLANE_Y, planes[i].transform.position.z + PLANE_LENGTH * planes.Length);
 			}
-		}
-		
-		// =========================================================================================================================
-		// Control ball
-        if (Input.GetMouseButton(0)) {
-			float percent = Input.mousePosition.x / Screen.width - 0.5f;
-			ball.GetComponent<SCR_Ball>().SetTarget (percent * CONTROL_AMPLIFIER);
 		}
 		
 		// =========================================================================================================================

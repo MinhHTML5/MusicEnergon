@@ -1,4 +1,4 @@
-﻿Shader "Unlit/Texture Colored" {
+﻿Shader "Custom/PlaneUnlit" {
     Properties {
         // Adds Color field we can modify
         _Color ("Main Color", Color) = (1, 1, 1, 1)        
@@ -18,7 +18,7 @@
                 
                 // Multiplies color (in constant) with texture
                 combine constant * texture
-            } 
+            }
         }
     }
 }

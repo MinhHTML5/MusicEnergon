@@ -6,14 +6,14 @@ using UnityEngine;
 public class SCR_Cube : MonoBehaviour {
 	public GameObject PFB_Particle;
 	
-	public const float SIZE_Z = 0.5f;
-	public const float SIZE_X = 1.0f;
+	public const float SIZE_Z = 3.5f;
+	public const float SIZE_X = 0.5f;
 	
-	public const float SPAWN_Z = 75;
+	public const float SPAWN_Z = 65;
 	public const float SPAWN_Y = 10;
 	public const float GRAVITY = 100;
 	public const float MIN_X = 0.5f;
-	public const float MAX_X = 2;
+	public const float SPAWN_X = 3;
 	
 	public float x;
 	public float y;
@@ -26,9 +26,11 @@ public class SCR_Cube : MonoBehaviour {
     }
 	
 	public void Spawn() {
-		x = Random.Range (MIN_X, MAX_X);
 		if (Random.Range (-10, 10) > 0) {
-			x = -x;
+			x = -SPAWN_X;
+		}
+		else {
+			x = SPAWN_X;
 		}
 		y = SPAWN_Y;
 		z = SPAWN_Z;
@@ -57,8 +59,8 @@ public class SCR_Cube : MonoBehaviour {
 		}
 		
 		Transform ball = SCR_Action.instance.ball.transform;
-		if (ball.position.z < transform.position.z + SIZE_Z && ball.position.z > transform.position.z - SIZE_Z
-		&&  ball.position.x < transform.position.x + SIZE_X && ball.position.x > transform.position.x - SIZE_X) {
+		if (ball.position.z < transform.position.z + SIZE_Z && ball.position.z > transform.position.z - SIZE_Z * 0.6f
+		&&  ball.position.x < transform.position.x + SIZE_X && ball.position.x > transform.position.x - SIZE_X * 0.6f) {
 			gameObject.SetActive (false);
 			
 			SCR_Camera.Brighten();

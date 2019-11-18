@@ -5,6 +5,8 @@ using UnityEngine;
 public class SCR_Camera : MonoBehaviour {
 	public static SCR_Camera instance;
 	
+	public static bool bloomEnabled = true;
+	
 	private float darkColorMultiplier = 0.1f;
 	private float brightColorMultiplier = 0.2f;
 	private float currentColorMultiplier = 0;
@@ -12,6 +14,7 @@ public class SCR_Camera : MonoBehaviour {
     private void Start() {
         instance = this;
 		currentColorMultiplier = darkColorMultiplier;
+		GetComponent<Kino.Bloom>().enabled = bloomEnabled;
     }
 	
 	public static void Brighten() {
@@ -36,12 +39,11 @@ public class SCR_Camera : MonoBehaviour {
 		GetComponent<Camera>().backgroundColor = color;
 		RenderSettings.fogColor = color;
 		
-		color = new Color(
-			SCR_Action.instance.currentColor.r * currentColorMultiplier * 4,
-			SCR_Action.instance.currentColor.g * currentColorMultiplier * 4,
-			SCR_Action.instance.currentColor.b * currentColorMultiplier * 4
-		);
-		
-		SCR_Action.instance.ChangePlaneColor (color);
+		SCR_Action.instance.ChangePlaneColor (SCR_Action.instance.currentColor);
     }
+	
+	public void ToggleBloom() {
+		bloomEnabled = !bloomEnabled;
+		GetComponent<Kino.Bloom>().enabled = bloomEnabled;
+	}
 }
