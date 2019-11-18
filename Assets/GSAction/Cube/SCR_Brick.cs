@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class SCR_Cube : MonoBehaviour {
-	public GameObject PFB_Particle;
-	
+public class SCR_Brick : MonoBehaviour {
 	public const float SIZE_Z = 3.5f;
 	public const float SIZE_X = 0.5f;
 	
-	public const float SPAWN_Z = 65;
+	public const float SPAWN_Z = 60;
 	public const float SPAWN_Y = 10;
 	public const float GRAVITY = 100;
 	public const float MIN_X = 0.5f;
@@ -26,13 +24,8 @@ public class SCR_Cube : MonoBehaviour {
         
     }
 	
-	public void Spawn() {
-		if (Random.Range (-10, 10) > 0) {
-			x = -SPAWN_X;
-		}
-		else {
-			x = SPAWN_X;
-		}
+	public void Spawn(float spawnX) {
+		x = spawnX;
 		y = SPAWN_Y;
 		z = SPAWN_Z;
 		
@@ -61,23 +54,10 @@ public class SCR_Cube : MonoBehaviour {
 		
 		if (SCR_Action.instance.lose == false) {
 			Transform ball = SCR_Action.instance.ball.transform;
-			if (ball.position.z < transform.position.z + SIZE_Z && ball.position.z > transform.position.z - SIZE_Z * 0.6f
-			&&  ball.position.x < transform.position.x + SIZE_X && ball.position.x > transform.position.x - SIZE_X * 0.6f) {
-				gameObject.SetActive (false);
-				
-				SCR_Camera.Brighten();
-				SCR_Action.instance.Score();
-				
-				GameObject tempParticle = SCR_Pool.GetFreeObject (PFB_Particle);
-				tempParticle.transform.position = transform.position;
-				tempParticle.GetComponent<SCR_Explosion>().SetColor (SCR_Action.instance.currentColor);
-				
-				if (x < 0) {
-					tempParticle.transform.localEulerAngles = new Vector3(0, 20, 0);
-				}
-				else {
-					tempParticle.transform.localEulerAngles = new Vector3(0, -20, 0);
-				}
+			if (ball.position.z < transform.position.z + SIZE_Z && ball.position.z > transform.position.z - SIZE_Z * 0.4f
+			&&  ball.position.x < transform.position.x + SIZE_X && ball.position.x > transform.position.x - SIZE_X * 0.4f) {
+				ball.gameObject.GetComponent<SCR_Ball>().Die();
+				SCR_Action.instance.lose = true;
 			}
 		}
     }

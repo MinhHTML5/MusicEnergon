@@ -1,19 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 
 public class SCR_Ball : MonoBehaviour {
+	public GameObject PFB_Particle;
+	public GameObject SPR_GlowLeft;
+	public GameObject SPR_GlowRight;
+	
 	public const float CONTROL_AMPLIFIER = 8;
 	public const float SPEED_X_MULTIPLIER = 0.4f;
 	public const float MAX_X = 0.5f;
 	public const float ATTACK_X = 3;
 	public const float MIN_STEP = 0.01f;
 	
+	public const float ALPHA_SPEED = 2.0f;
+	public const float MIN_ALPHA = 0.05f;
+	public const float MAX_ALPHA = 0.3f;
+	
 	public float x;
 	public float targetX;
 	public bool attacking;
+	
+	private float alphaLeft = MIN_ALPHA;
+	private float alphaRight = MIN_ALPHA;
 	
 	private bool controlReady = true;
 	private ParticleSystem ps1;
@@ -73,7 +85,7 @@ public class SCR_Ball : MonoBehaviour {
 		if (mouseDown == true) {
 			if (attacking == false) {
 				targetX = mouseX * CONTROL_AMPLIFIER;
-				targetX = Mathf.Clamp(targetX, -MAX_X, MAX_X);
+				targetX = Mathf.Clamp(targetX, -MAX_X * 2, MAX_X * 2);
 			}
 		}
 		else {
@@ -90,17 +102,45 @@ public class SCR_Ball : MonoBehaviour {
 				x += (targetX - x) * SPEED_X_MULTIPLIER;
 			}
 			
+			if (x <= -MAX_X) alphaLeft += dt * ALPHA_SPEED;
+			else alphaLeft -= dt * ALPHA_SPEED;
+			
+			if (x >= MAX_X)  alphaRight += dt * ALPHA_SPEED;
+			else alphaRight -= dt * ALPHA_SPEED;
+			
+			alphaLeft = Mathf.Clamp (alphaLeft, MIN_ALPHA, MAX_ALPHA);
+			alphaRight = Mathf.Clamp (alphaRight, MIN_ALPHA, MAX_ALPHA);
+			
 			List<GameObject> cubes = SCR_Pool.GetObjectList(SCR_Action.instance.PFB_Cube);
 			for (int i=0; i<cubes.Count; i++) {
 				if (cubes[i].activeSelf) {
 					if (cubes[i].transform.position.z < transform.position.z + SCR_Cube.SIZE_Z * 0.25f
 					&&  cubes[i].transform.position.z > transform.position.z - SCR_Cube.SIZE_Z * 0.47f) {
-						if (cubes[i].transform.position.x > 0 && targetX > 0) {
+						if (cubes[i].transform.position.x > 0 && targetX >= MAX_X) {
 							targetX = ATTACK_X;
 							attacking = true;
 							break;
 						}
-						else if (cubes[i].transform.position.x < 0 && targetX < 0) {
+						else if (cubes[i].transform.position.x < 0 && targetX <= -MAX_X) {
+							targetX = -ATTACK_X;
+							attacking = true;
+							break;
+						}
+					}
+				}
+			}
+			
+			List<GameObject> bricks = SCR_Pool.GetObjectList(SCR_Action.instance.PFB_Brick);
+			for (int i=0; i<bricks.Count; i++) {
+				if (bricks[i].activeSelf) {
+					if (bricks[i].transform.position.z < transform.position.z + SCR_Cube.SIZE_Z * 0.25f
+					&&  bricks[i].transform.position.z > transform.position.z - SCR_Cube.SIZE_Z * 0.47f) {
+						if (bricks[i].transform.position.x > 0 && targetX >= MAX_X) {
+							targetX = ATTACK_X;
+							attacking = true;
+							break;
+						}
+						else if (bricks[i].transform.position.x < 0 && targetX <= -MAX_X) {
 							targetX = -ATTACK_X;
 							attacking = true;
 							break;
@@ -121,7 +161,50 @@ public class SCR_Ball : MonoBehaviour {
 			}
 		}
 		
+		Color leftLaneColor = SCR_Action.instance.currentColor;
+		leftLaneColor.a = alphaLeft;
+		SPR_GlowLeft.GetComponent<Renderer>().material.SetColor("_Color", leftLaneColor); 
+		
+		Color rightLaneColor = SCR_Action.instance.currentColor;
+		rightLaneColor.a = alphaRight;
+		SPR_GlowRight.GetComponent<Renderer>().material.SetColor("_Color", rightLaneColor); 
 		
 		transform.position = new Vector3(x, transform.position.y, transform.position.z);
     }
+	
+	public void Die() {
+		GameObject tempParticle = SCR_Pool.GetFreeObject (PFB_Particle);
+		tempParticle.transform.position = transform.position;
+		tempParticle.GetComponent<SCR_Explosion>().SetColor (SCR_Action.instance.currentColor);
+		if (x < 0) {
+			tempParticle.transform.localEulerAngles = new Vector3(0, 30, 0);
+		}
+		else {
+			tempParticle.transform.localEulerAngles = new Vector3(0, -30, 0);
+		}
+		
+		var main = tempParticle.GetComponent<ParticleSystem>().main;
+		main.startColor = SCR_Action.instance.currentColor;
+		
+		Gradient grad = new Gradient();
+        grad.SetKeys(
+			new GradientColorKey[] { 
+				new GradientColorKey(SCR_Action.instance.currentColor, 0.0f), 
+				new GradientColorKey(SCR_Action.instance.currentColor, 1.0f) 
+			}, 
+			new GradientAlphaKey[] { 
+				new GradientAlphaKey(1.0f, 0.0f), 
+				new GradientAlphaKey(1.0f, 0.8f), 
+				new GradientAlphaKey(0.0f, 1.0f) 
+			} 
+		);
+		
+		var col = tempParticle.GetComponent<ParticleSystem>().colorOverLifetime;
+		col.color = grad;
+		
+		var emit = ps1.emission;
+		emit.rate = 0;
+		emit = ps2.emission;
+		emit.rate = 0;
+	}
 }
