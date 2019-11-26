@@ -7,6 +7,9 @@ public class SCR_Camera : MonoBehaviour {
 	
 	public static bool bloomEnabled = true;
 	
+	public GameObject BTN_BloomOn;
+	public GameObject BTN_BloomOff;
+	
 	private float darkColorMultiplier = 0.1f;
 	private float brightColorMultiplier = 0.2f;
 	private float currentColorMultiplier = 0;
@@ -15,6 +18,9 @@ public class SCR_Camera : MonoBehaviour {
         instance = this;
 		currentColorMultiplier = darkColorMultiplier;
 		GetComponent<Kino.Bloom>().enabled = bloomEnabled;
+		
+		BTN_BloomOn.SetActive (bloomEnabled);
+		BTN_BloomOff.SetActive (!bloomEnabled);
     }
 	
 	public static void Brighten() {
@@ -45,5 +51,7 @@ public class SCR_Camera : MonoBehaviour {
 	public void ToggleBloom() {
 		bloomEnabled = !bloomEnabled;
 		GetComponent<Kino.Bloom>().enabled = bloomEnabled;
+		BTN_BloomOn.SetActive (bloomEnabled);
+		BTN_BloomOff.SetActive (!bloomEnabled);
 	}
 }

@@ -133,8 +133,8 @@ public class SCR_Ball : MonoBehaviour {
 			List<GameObject> bricks = SCR_Pool.GetObjectList(SCR_Action.instance.PFB_Brick);
 			for (int i=0; i<bricks.Count; i++) {
 				if (bricks[i].activeSelf) {
-					if (bricks[i].transform.position.z < transform.position.z + SCR_Cube.SIZE_Z * 0.25f
-					&&  bricks[i].transform.position.z > transform.position.z - SCR_Cube.SIZE_Z * 0.47f) {
+					if (bricks[i].transform.position.z < transform.position.z + SCR_Cube.SIZE_Z * 0.2f
+					&&  bricks[i].transform.position.z > transform.position.z - SCR_Cube.SIZE_Z * 0.4f) {
 						if (bricks[i].transform.position.x > 0 && targetX >= MAX_X) {
 							targetX = ATTACK_X;
 							attacking = true;

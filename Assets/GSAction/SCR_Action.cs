@@ -24,6 +24,7 @@ public class SCR_Action : MonoBehaviour {
 	public GameObject PFB_Brick;
 	public GameObject PFB_Explosion;
 	
+	
 	public Material MAT_Plane;
 	public Material[] MAT_Cube;
 	public GameObject CTN_Replay;
@@ -104,6 +105,9 @@ public class SCR_Action : MonoBehaviour {
 		}
 		if (spawnIndex < SCR_MusicData.data.Length) {
 			spawnCount += dt;
+			if (musicDelay <= 0) {
+				spawnCount = MUS_Unity.time + SCR_Cube.SPAWN_Z / SPEED_Z - SCR_MusicData.data[0] + MUSIC_OFFSET;
+			}
 			if (spawnCount >= SCR_MusicData.data[spawnIndex]) {
 				spawnIndex ++;
 				GameObject tempCube = SCR_Pool.GetFreeObject (PFB_Cube);
@@ -122,8 +126,8 @@ public class SCR_Action : MonoBehaviour {
 				List<GameObject> cubes = SCR_Pool.GetObjectList(SCR_Action.instance.PFB_Cube);
 				for (int i=0; i<cubes.Count; i++) {
 					if (cubes[i].activeSelf) {
-						if (cubes[i].transform.position.z < SCR_Brick.SPAWN_Z + SCR_Cube.SIZE_Z * 1.3f
-						&&  cubes[i].transform.position.z > SCR_Brick.SPAWN_Z - SCR_Cube.SIZE_Z * 1.1f
+						if (cubes[i].transform.position.z < SCR_Brick.SPAWN_Z + SCR_Cube.SIZE_Z * 1.5f
+						&&  cubes[i].transform.position.z > SCR_Brick.SPAWN_Z - SCR_Cube.SIZE_Z * 1.3f
 						&&  Mathf.Sign(cubes[i].transform.position.x) == Mathf.Sign(brickX)) {
 							spawn = false;
 							break;

@@ -1,7 +1,73 @@
 fileFormatVersion: 2
 guid: 5d28a3e8ed3998c49b63ecfcd6b75f01
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 4543722681554414322
+    second: TEX_Bloom_0
+  - first:
+      213: -679874672115232280
+    second: TEX_Bloom_1
+  - first:
+      213: 285434804220156019
+    second: TEX_Bloom_2
+  - first:
+      213: 8014193927732950750
+    second: TEX_Bloom_3
+  - first:
+      213: 9132197580951094054
+    second: TEX_Bloom_4
+  - first:
+      213: -3736787110810025455
+    second: TEX_Bloom_5
+  - first:
+      213: -6320326402248767170
+    second: TEX_Bloom_6
+  - first:
+      213: -3807797660585773878
+    second: TEX_Bloom_7
+  - first:
+      213: 6630505129375955061
+    second: TEX_Bloom_8
+  - first:
+      213: -1007902972061274105
+    second: TEX_Bloom_9
+  - first:
+      213: -3571237884028749951
+    second: TEX_Bloom_10
+  - first:
+      213: -4738597255423229469
+    second: TEX_Bloom_11
+  - first:
+      213: 5060322738674578258
+    second: TEX_Bloom_12
+  - first:
+      213: -7590338786939263939
+    second: TEX_Bloom_13
+  - first:
+      213: -5685505092663299214
+    second: TEX_Bloom_14
+  - first:
+      213: 6563041991920532778
+    second: TEX_Bloom_15
+  - first:
+      213: 8436604148427638474
+    second: TEX_Bloom_16
+  - first:
+      213: -5232696684574814511
+    second: TEX_Bloom_17
+  - first:
+      213: -3916378966768859254
+    second: TEX_Bloom_18
+  - first:
+      213: -6457664833184764064
+    second: TEX_Bloom_19
+  - first:
+      213: 6512559721393172397
+    second: TEX_Bloom_20
+  - first:
+      213: -641791539695958885
+    second: TEX_Bloom_21
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -40,7 +106,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -108,7 +174,49 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: TEX_Bloom_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 80
+        width: 256
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 031731d4c30eeeb46bd9297f6381e29e
+      internalID: 4543722681554414322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TEX_Bloom_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 256
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 16dccfc72776b3840a4a882dee44bb2c
+      internalID: -679874672115232280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
