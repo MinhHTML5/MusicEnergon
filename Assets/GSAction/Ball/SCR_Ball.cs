@@ -8,23 +8,26 @@ using UnityEngine.UI;
 public class SCR_Ball : MonoBehaviour {
 	public GameObject PFB_Particle;
 	public GameObject SPR_GlowLeft;
+	public GameObject SPR_GlowMiddle;
 	public GameObject SPR_GlowRight;
 	
 	public const float CONTROL_AMPLIFIER = 8;
-	public const float SPEED_X_MULTIPLIER = 0.4f;
-	public const float MAX_X = 0.5f;
-	public const float ATTACK_X = 3;
-	public const float MIN_STEP = 0.01f;
+	public const float SPEED_X_MULTIPLIER = 0.2f;
+	public const float MAX_X = 0.7f;
+	public const float ATTACK_X = 3.5f;
+	public const float MIN_STEP = 0.001f;
 	
 	public const float ALPHA_SPEED = 2.0f;
-	public const float MIN_ALPHA = 0.05f;
-	public const float MAX_ALPHA = 0.3f;
+	public const float MIN_ALPHA = 0.1f;
+	public const float MAX_ALPHA = 0.35f;
+	public const float MAX_ALPHA_MIDDLE = 0.2f;
 	
 	public float x;
 	public float targetX;
 	public bool attacking;
 	
 	private float alphaLeft = MIN_ALPHA;
+	private float alphaMiddle = MAX_ALPHA_MIDDLE;
 	private float alphaRight = MIN_ALPHA;
 	
 	private bool controlReady = true;
@@ -108,7 +111,12 @@ public class SCR_Ball : MonoBehaviour {
 			if (x >= MAX_X)  alphaRight += dt * ALPHA_SPEED;
 			else alphaRight -= dt * ALPHA_SPEED;
 			
+			if (x > -MAX_X && x < MAX_X)  alphaMiddle += dt * ALPHA_SPEED;
+			else alphaMiddle -= dt * ALPHA_SPEED;
+			
+			
 			alphaLeft = Mathf.Clamp (alphaLeft, MIN_ALPHA, MAX_ALPHA);
+			alphaMiddle = Mathf.Clamp (alphaMiddle, MIN_ALPHA, MAX_ALPHA_MIDDLE);
 			alphaRight = Mathf.Clamp (alphaRight, MIN_ALPHA, MAX_ALPHA);
 			
 			List<GameObject> cubes = SCR_Pool.GetObjectList(SCR_Action.instance.PFB_Cube);
@@ -164,6 +172,10 @@ public class SCR_Ball : MonoBehaviour {
 		Color leftLaneColor = SCR_Action.instance.currentColor;
 		leftLaneColor.a = alphaLeft;
 		SPR_GlowLeft.GetComponent<Renderer>().material.SetColor("_Color", leftLaneColor); 
+		
+		Color middleLaneColor = SCR_Action.instance.currentColor;
+		middleLaneColor.a = alphaMiddle;
+		SPR_GlowMiddle.GetComponent<Renderer>().material.SetColor("_Color", middleLaneColor); 
 		
 		Color rightLaneColor = SCR_Action.instance.currentColor;
 		rightLaneColor.a = alphaRight;

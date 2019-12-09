@@ -4812,6 +4812,7 @@ MonoBehaviour:
   PFB_Particle: {fileID: 7947904250227269364, guid: 0f3dd514ddbe8f24a93d955961142728,
     type: 3}
   SPR_GlowLeft: {fileID: 1555973861}
+  SPR_GlowMiddle: {fileID: 1669333397}
   SPR_GlowRight: {fileID: 240919613}
   x: 0
   targetX: 0
@@ -5121,7 +5122,7 @@ RectTransform:
   - {fileID: 1247033230}
   - {fileID: 1689347392}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5362,11 +5363,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 240919613}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5, y: -0.2, z: 25}
-  m_LocalScale: {x: 0.1, y: 1, z: 5}
+  m_LocalPosition: {x: 1.4, y: -0.2, z: 25}
+  m_LocalScale: {x: 0.14, y: 1, z: 5}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &404654035
 GameObject:
@@ -5595,8 +5596,9 @@ GameObject:
   m_Component:
   - component: {fileID: 678395048}
   - component: {fileID: 678395047}
+  - component: {fileID: 678395049}
   m_Layer: 0
-  m_Name: MUS_Unity
+  m_Name: SND_Music
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5706,12 +5708,26 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 678395046}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.000015258789, y: 0.000030517578, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &678395049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 678395046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e56fa29fa6f1da43871e0a414f47c91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  music:
+  - {fileID: 8300000, guid: cefcd8bfe2fc67647b3069e9d9002510, type: 3}
 --- !u!1 &977177301
 GameObject:
   m_ObjectHideFlags: 0
@@ -5776,7 +5792,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1247033229
 GameObject:
@@ -6035,8 +6051,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1555973861}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.5, y: -0.2, z: 25}
-  m_LocalScale: {x: 0.1, y: 1, z: 5}
+  m_LocalPosition: {x: -1.4, y: -0.2, z: 25}
+  m_LocalScale: {x: 0.14, y: 1, z: 5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -6170,6 +6186,99 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1620690121}
   m_CullTransparentMesh: 0
+--- !u!1 &1669333397
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1669333401}
+  - component: {fileID: 1669333400}
+  - component: {fileID: 1669333399}
+  - component: {fileID: 1669333398}
+  m_Layer: 0
+  m_Name: SPR_GlowMiddle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!64 &1669333398
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669333397}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &1669333399
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669333397}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 6ec6baa9385e7a14b8130050564fbbe5, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &1669333400
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669333397}
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1669333401
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669333397}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.2, z: 25}
+  m_LocalScale: {x: 0.14, y: 1, z: 5}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1689347391
 GameObject:
   m_ObjectHideFlags: 0
@@ -6280,6 +6389,8 @@ MonoBehaviour:
     type: 3}
   PFB_Brick: {fileID: 3333334116442512264, guid: fc8c05d1e8ab45e48abbc4152e01d51a,
     type: 3}
+  PFB_Obstacle: {fileID: 3831812810484873065, guid: e590c9e4512006d458a27c6b8554eecd,
+    type: 3}
   PFB_Explosion: {fileID: 7947904250227269364, guid: 6e715bb899851fe46be84c71dd3aaf1f,
     type: 3}
   MAT_Plane: {fileID: 2100000, guid: 0b8a227d05d3a0b4ebaf7b1600804748, type: 2}
@@ -6288,7 +6399,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: aa8461f7353b37a42b3c1f0363c13532, type: 2}
   CTN_Replay: {fileID: 1689347391}
   IMG_Tutorial: {fileID: 87860685}
-  MUS_Unity: {fileID: 678395047}
+  SND_Music: {fileID: 678395047}
   TXT_Score: {fileID: 1247033231}
   ball: {fileID: 64844949}
   planes:

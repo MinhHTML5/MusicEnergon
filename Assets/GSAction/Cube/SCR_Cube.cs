@@ -6,14 +6,14 @@ using UnityEngine;
 public class SCR_Cube : MonoBehaviour {
 	public GameObject PFB_Particle;
 	
-	public const float SIZE_Z = 3.5f;
+	public const float SIZE_Z = 3.2f;
 	public const float SIZE_X = 0.5f;
 	
 	public const float SPAWN_Z = 65;
 	public const float SPAWN_Y = 10;
 	public const float GRAVITY = 100;
 	public const float MIN_X = 0.5f;
-	public const float SPAWN_X = 3;
+	public const float SPAWN_X = 3.5f;
 	
 	public float x;
 	public float y;

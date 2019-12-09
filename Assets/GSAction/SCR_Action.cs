@@ -16,12 +16,14 @@ public class SCR_Action : MonoBehaviour {
 	public const float COLOR_CHANGE_SPEED = 0.6f;
 	public const float BRICK_SPAWN_LATENCY = 1.0f;
 	public const float BRICK_BLOCK_LATENCY = 0.06f;
+	public const float OBSTACLE_CHANCE = 15;
 	
 	public static SCR_Action instance;
 	
 	public GameObject PFB_Plane;
 	public GameObject PFB_Cube;
 	public GameObject PFB_Brick;
+	public GameObject PFB_Obstacle;
 	public GameObject PFB_Explosion;
 	
 	
@@ -29,7 +31,7 @@ public class SCR_Action : MonoBehaviour {
 	public Material[] MAT_Cube;
 	public GameObject CTN_Replay;
 	public GameObject IMG_Tutorial;
-	public AudioSource MUS_Unity;
+	public AudioSource SND_Music;
 	public Text TXT_Score;
 	
 	public GameObject ball;
@@ -70,7 +72,7 @@ public class SCR_Action : MonoBehaviour {
 		
 		spawnCount = 0;
 		spawnIndex = 0;
-		musicDelay = SCR_Cube.SPAWN_Z / SPEED_Z - SCR_MusicData.data[0] + MUSIC_OFFSET;
+		musicDelay = SCR_Cube.SPAWN_Z / SPEED_Z - SCR_MusicData.instance.GetData()[0] + MUSIC_OFFSET;
 		brickCount = musicDelay;
 		
 		changeColorInterval = 0.5f;
@@ -78,6 +80,8 @@ public class SCR_Action : MonoBehaviour {
 		PickRandomColor();
 		currentColor = targetColor;
 		ApplyColor();
+		
+		brickCount = BRICK_SPAWN_LATENCY * 3;
 		
 		CTN_Replay.SetActive (false);
     }
@@ -99,25 +103,26 @@ public class SCR_Action : MonoBehaviour {
 		if (musicDelay > 0) {
 			musicDelay -= dt;
 			if (musicDelay <= 0) {
-				MUS_Unity.Play();
+				SND_Music.Play();
 				IMG_Tutorial.SetActive (false);
 			}
 		}
-		if (spawnIndex < SCR_MusicData.data.Length) {
+		if (spawnIndex < SCR_MusicData.instance.GetData().Length) {
 			spawnCount += dt;
 			if (musicDelay <= 0) {
-				spawnCount = MUS_Unity.time + SCR_Cube.SPAWN_Z / SPEED_Z - SCR_MusicData.data[0] + MUSIC_OFFSET;
+				spawnCount = SND_Music.time + SCR_Cube.SPAWN_Z / SPEED_Z - SCR_MusicData.instance.GetData()[0] + MUSIC_OFFSET;
 			}
-			if (spawnCount >= SCR_MusicData.data[spawnIndex]) {
+			if (spawnCount >= SCR_MusicData.instance.GetData()[spawnIndex]) {
 				spawnIndex ++;
 				GameObject tempCube = SCR_Pool.GetFreeObject (PFB_Cube);
 				tempCube.GetComponent<SCR_Cube>().Spawn();
-				SCR_ProgressBar.instance.SetProgress (1.0f * spawnIndex / SCR_MusicData.data.Length);
+				SCR_ProgressBar.instance.SetProgress (1.0f * spawnIndex / SCR_MusicData.instance.GetData().Length);
 			}
 		
 			brickCount -= dt;
 			if (brickCount <= 0) {
 				float brickX = SCR_Brick.SPAWN_X;
+				
 				if (Random.Range(-10, 10) > 0) {
 					brickX = -brickX;
 				}
@@ -137,8 +142,15 @@ public class SCR_Action : MonoBehaviour {
 				
 				if (spawn == true) {
 					brickCount = BRICK_SPAWN_LATENCY;
-					GameObject tempCube = SCR_Pool.GetFreeObject (PFB_Brick);
-					tempCube.GetComponent<SCR_Brick>().Spawn(brickX);
+					if (Random.Range(0, 100) > OBSTACLE_CHANCE) {
+						GameObject tempBrick = SCR_Pool.GetFreeObject (PFB_Brick);
+						tempBrick.GetComponent<SCR_Brick>().Spawn(brickX);
+					}
+					else {
+						GameObject tempObstacle = SCR_Pool.GetFreeObject (PFB_Obstacle);
+						tempObstacle.GetComponent<SCR_Obstacle>().Spawn();
+					}
+					brickCount = BRICK_SPAWN_LATENCY;
 				}
 				else {
 					brickCount = BRICK_BLOCK_LATENCY;
@@ -189,7 +201,7 @@ public class SCR_Action : MonoBehaviour {
 		// Handle losing
 		if (lose && loseDelay > 0) {
 			loseDelay -= dt;
-			MUS_Unity.volume = loseDelay;
+			SND_Music.volume = loseDelay;
 			if (loseDelay <= 0) {
 				loseDelay = 0;
 				CTN_Replay.SetActive (true);
