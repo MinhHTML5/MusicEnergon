@@ -5,98 +5,102 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class SCR_Action : MonoBehaviour {
-	public const float PLANE_Y = -0.5f;
-	public const float PLANE_LENGTH = 100;
-	public const float SPEED_Z = 15;
 #if UNITY_WEBGL
-	public const float MUSIC_OFFSET = 0.1f;
+	public const float 			MUSIC_OFFSET = 0.1f;
 #else
-	public const float MUSIC_OFFSET = 0.0f;
+	public const float 			MUSIC_OFFSET = 0.0f;
 #endif
-	public const float COLOR_CHANGE_SPEED = 0.6f;
-	public const float BRICK_SPAWN_LATENCY = 1.0f;
-	public const float BRICK_BLOCK_LATENCY = 0.06f;
-	public const float OBSTACLE_CHANCE = 15;
+
+	public const float 			SCROLL_SPEED = 15;
+	public const float 			COLOR_CHANGE_SPEED = 1.0f;
+	public const float 			BRICK_SPAWN_LATENCY = 1.0f;
+	public const float 			BRICK_BLOCK_LATENCY = 0.06f;
+	public const float 			MID_BRICK_CHANCE = 15;
 	
-	public static SCR_Action instance;
+	public static SCR_Action 	instance;
 	
-	public GameObject PFB_Plane;
-	public GameObject PFB_Cube;
-	public GameObject PFB_Brick;
-	public GameObject PFB_Obstacle;
-	public GameObject PFB_Explosion;
+	public GameObject 			PFB_Plane;
+	public GameObject 			PFB_Cube;
+	public GameObject 			PFB_Brick;
+	public GameObject 			PFB_Brick_2;
+	public GameObject 			PFB_Explosion;
+	
+	public GameObject 			MDL_DiscoBall;
+	public GameObject 			SPR_GlowLeft;
+	public GameObject 			SPR_GlowMiddle;
+	public GameObject 			SPR_GlowRight;
+	public GameObject 			CTN_Replay;
+	public GameObject 			IMG_Tutorial;
+	public AudioSource 			SND_Music;
+	public Text 				TXT_Score;
+	
+	public GameObject 			ball;
+	
+	public Color[] 				majorGlobalColor;
+	public Color[] 				minorGlobalColor;
+	public int					oldColorId;
+	public int					currentColorId;
+	public Color 				majorColor;
+	public Color				minorColor;
 	
 	
-	public Material MAT_Plane;
-	public Material[] MAT_Cube;
-	public GameObject CTN_Replay;
-	public GameObject IMG_Tutorial;
-	public AudioSource SND_Music;
-	public Text TXT_Score;
+	public  int   				score = 0;
+	public  bool  				lose = false;
+	public  float 				loseDelay = 1;
 	
-	public GameObject ball;
-	public GameObject[] planes;
+	private int 				laneHighlight = 0;
+	private float 				brickCount = 0;
+	private float 				spawnCount = 0;
+	private int   				spawnIndex = 0;
+	private float 				musicDelay = 0;
+	private float 				endDelay = 6.0f;
 	
-	public Color[] globalColor;
-	public Color   targetColor;
-	public Color   oldColor;
-	public Color   currentColor;
+	private float 				colorShiftCount = 0;
+	private float 				colorShiftInterval = 0;
 	
 	
-	public  int   score = 0;
-	public  bool  lose = false;
-	public  float loseDelay = 1;
 	
-	private float brickCount = 0;
-	private float spawnCount = 0;
-	private int   spawnIndex = 0;
-	private float musicDelay = 0;
-	private float endDelay = 6.0f;
-	private float changeColorInterval = 0;
 	
 	private void Start() {
+		// Init system things
+		instance = this;
+		SCR_Pool.Flush();
 		Application.targetFrameRate = 60;
 #if UNITY_STANDALONE_WIN
 		Screen.SetResolution(540, 960, false);
 #endif
-
-		SCR_Pool.Flush();
 		
-		instance = this;
-		
-		planes = new GameObject[4];
-		for (int i=0; i<planes.Length; i++) {
-			planes[i] = SCR_Pool.GetFreeObject (PFB_Plane);
-			planes[i].transform.position = new Vector3(0, PLANE_Y, PLANE_LENGTH * i);
+		/*
+		// Create 4 planes
+		for (int i=0; i<SCR_Plane.PLANE_NUMBER; i++) {
+			GameObject plane = SCR_Pool.GetFreeObject (PFB_Plane);
+			plane.GetComponent<SCR_Plane>().Spawn (i);
 		}
+		*/
 		
 		spawnCount = 0;
 		spawnIndex = 0;
-		musicDelay = SCR_Cube.SPAWN_Z / SPEED_Z - SCR_MusicData.instance.GetData()[0] + MUSIC_OFFSET;
-		brickCount = musicDelay;
+		musicDelay = SCR_Cube.SPAWN_Z / SCROLL_SPEED - SCR_MusicData.instance.GetData()[0] + MUSIC_OFFSET;
+		brickCount = BRICK_SPAWN_LATENCY * 3;
 		
-		changeColorInterval = 0.5f;
+		colorShiftInterval = 0.5f;
 		
-		PickRandomColor();
-		currentColor = targetColor;
+		PickRandomColor(true);
+		
+		SPR_GlowLeft.GetComponent<SCR_Lane>().SetColor (majorColor, false, true);
+		SPR_GlowMiddle.GetComponent<SCR_Lane>().SetColor (minorColor, true, true);
+		SPR_GlowRight.GetComponent<SCR_Lane>().SetColor (majorColor, false, true);
+		
 		ApplyColor();
 		
-		brickCount = BRICK_SPAWN_LATENCY * 3;
+		
+		
 		
 		CTN_Replay.SetActive (false);
     }
 
     private void Update() {
 		float dt = Time.deltaTime;
-		
-		// =========================================================================================================================
-		// Move bottom plane
-		for (int i=0; i<planes.Length; i++) {
-			planes[i].transform.position = new Vector3(0, PLANE_Y, planes[i].transform.position.z - SPEED_Z * dt * loseDelay);
-			if (planes[i].transform.position.z < -PLANE_LENGTH) {
-				planes[i].transform.position = new Vector3(0, PLANE_Y, planes[i].transform.position.z + PLANE_LENGTH * planes.Length);
-			}
-		}
 		
 		// =========================================================================================================================
 		// Spawn cubes
@@ -110,7 +114,7 @@ public class SCR_Action : MonoBehaviour {
 		if (spawnIndex < SCR_MusicData.instance.GetData().Length) {
 			spawnCount += dt;
 			if (musicDelay <= 0) {
-				spawnCount = SND_Music.time + SCR_Cube.SPAWN_Z / SPEED_Z - SCR_MusicData.instance.GetData()[0] + MUSIC_OFFSET;
+				spawnCount = SND_Music.time + SCR_Cube.SPAWN_Z / SCROLL_SPEED - SCR_MusicData.instance.GetData()[0] + MUSIC_OFFSET;
 			}
 			if (spawnCount >= SCR_MusicData.instance.GetData()[spawnIndex]) {
 				spawnIndex ++;
@@ -142,13 +146,13 @@ public class SCR_Action : MonoBehaviour {
 				
 				if (spawn == true) {
 					brickCount = BRICK_SPAWN_LATENCY;
-					if (Random.Range(0, 100) > OBSTACLE_CHANCE) {
+					if (Random.Range(0, 100) > MID_BRICK_CHANCE) {
 						GameObject tempBrick = SCR_Pool.GetFreeObject (PFB_Brick);
 						tempBrick.GetComponent<SCR_Brick>().Spawn(brickX);
 					}
 					else {
-						GameObject tempObstacle = SCR_Pool.GetFreeObject (PFB_Obstacle);
-						tempObstacle.GetComponent<SCR_Obstacle>().Spawn();
+						GameObject tempBrick = SCR_Pool.GetFreeObject (PFB_Brick_2);
+						tempBrick.GetComponent<SCR_Brick2>().Spawn();
 					}
 					brickCount = BRICK_SPAWN_LATENCY;
 				}
@@ -166,34 +170,42 @@ public class SCR_Action : MonoBehaviour {
 		
 		// =========================================================================================================================
 		// Change global color
-		if (currentColor != targetColor) {
-			float changeSpeed = dt * COLOR_CHANGE_SPEED;
-			float amountR = (targetColor.r - oldColor.r) * changeSpeed;
-			float amountG = (targetColor.g - oldColor.g) * changeSpeed;
-			float amountB = (targetColor.b - oldColor.b) * changeSpeed;
-			
-			if ((currentColor.r < targetColor.r && currentColor.r + amountR > targetColor.r)
-			||  (currentColor.r > targetColor.r && currentColor.r + amountR < targetColor.r)
-			||  (currentColor.g < targetColor.g && currentColor.g + amountG > targetColor.g)
-			||  (currentColor.g > targetColor.g && currentColor.g + amountG < targetColor.g)
-			||  (currentColor.b < targetColor.b && currentColor.b + amountB > targetColor.b)
-			||  (currentColor.b > targetColor.b && currentColor.b + amountB < targetColor.b)) {
-				currentColor = targetColor;
+		if (oldColorId != currentColorId) {
+			colorShiftCount += dt * COLOR_CHANGE_SPEED;
+			if (colorShiftCount > 1) {
+				colorShiftCount = 0;
+				majorColor = majorGlobalColor[currentColorId];
+				minorColor = minorGlobalColor[currentColorId];
+				oldColorId = currentColorId;
 			}
 			else {
-				currentColor.r += amountR;
-				currentColor.g += amountG;
-				currentColor.b += amountB;
+				majorColor = SCR_Helper.ColorTween (majorGlobalColor[oldColorId], majorGlobalColor[currentColorId], colorShiftCount);
+				minorColor = SCR_Helper.ColorTween (minorGlobalColor[oldColorId], minorGlobalColor[currentColorId], colorShiftCount);
 			}
-			
-			ApplyColor();
 		}
+		ApplyColor();
 		
 		if (musicDelay <= 0) {
-			changeColorInterval += dt;
-			if (changeColorInterval > 18.28f) {
-				changeColorInterval -= 18.28f;
-				PickRandomColor();
+			colorShiftInterval += dt;
+			if (colorShiftInterval > 18.28f) {
+				colorShiftInterval -= 18.28f;
+				PickRandomColor(false);
+				
+				if (laneHighlight == -1) {
+					SPR_GlowLeft.GetComponent<SCR_Lane>().SetColor (minorGlobalColor[currentColorId], true, false);
+					SPR_GlowMiddle.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
+					SPR_GlowRight.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
+				}
+				else if (laneHighlight == 0) {
+					SPR_GlowLeft.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
+					SPR_GlowMiddle.GetComponent<SCR_Lane>().SetColor (minorGlobalColor[currentColorId], true, false);
+					SPR_GlowRight.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
+				}
+				else if (laneHighlight == 1) {
+					SPR_GlowLeft.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
+					SPR_GlowMiddle.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
+					SPR_GlowRight.GetComponent<SCR_Lane>().SetColor (minorGlobalColor[currentColorId], true, false);
+				}
 			}
 		}
 		
@@ -210,32 +222,38 @@ public class SCR_Action : MonoBehaviour {
 		// =========================================================================================================================
     }
 	
-	private void ApplyColor() {
-		MAT_Cube[0].SetColor("_Color", currentColor); 
-		MAT_Cube[1].SetColor("_Color", currentColor); 
+	private void PickRandomColor(bool applyNow) {
+		int choose = 0;
+		do {
+			choose = Random.Range (0, majorGlobalColor.Length);
+		}
+		while (choose == currentColorId);
 		
-		ball.GetComponent<SCR_Ball>().SetColor (currentColor);
+		oldColorId = currentColorId;
+		currentColorId = choose;
+		colorShiftCount = 0;
+		
+		if (applyNow) {
+			oldColorId = choose;
+			majorColor = majorGlobalColor[currentColorId];
+			minorColor = minorGlobalColor[currentColorId];
+		}
+	}
+	
+	private void ApplyColor() {
+		SCR_Plane.SetColor (majorColor);
+		SCR_Cube.SetColor (majorColor);
+		
+		MDL_DiscoBall.GetComponent<SCR_DiscoBall>().SetColor (majorColor);
+		ball.GetComponent<SCR_Ball>().SetColor (majorColor);
 		
 		List<GameObject> explosions = SCR_Pool.GetObjectList(PFB_Explosion);
 		for (int i=0; i<explosions.Count; i++) {
-			explosions[i].GetComponent<SCR_Explosion>().SetColor (currentColor);
+			explosions[i].GetComponent<SCR_Explosion>().SetColor (majorColor);
 		}
 	}
 	
-	public void ChangePlaneColor(Color color) {
-		MAT_Plane.SetColor("_Color", color); 
-	}
 	
-	private void PickRandomColor() {
-		int choose = 0;
-		do {
-			choose = Random.Range (0, globalColor.Length);
-		}
-		while (targetColor == globalColor[choose]);
-		
-		oldColor = targetColor;
-		targetColor = globalColor[choose];
-	}
 	
 	public void Replay() {
 		SceneManager.LoadScene("GSAction/SCN_Action");
@@ -244,5 +262,31 @@ public class SCR_Action : MonoBehaviour {
 	public void Score() {
 		score ++;
 		TXT_Score.text = "" + score;
+	}
+	
+	public void HighlightLane (int lane) {
+		if (laneHighlight != lane) {
+			if (laneHighlight == -1) {
+				SPR_GlowLeft.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
+			}
+			else if (laneHighlight == 0) {
+				SPR_GlowMiddle.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
+			}
+			else if (laneHighlight == 1) {
+				SPR_GlowRight.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
+			}
+			
+			if (lane == -1) {
+				SPR_GlowLeft.GetComponent<SCR_Lane>().SetColor (minorGlobalColor[currentColorId], true, false);
+			}
+			else if (lane == 0) {
+				SPR_GlowMiddle.GetComponent<SCR_Lane>().SetColor (minorGlobalColor[currentColorId], true, false);
+			}
+			else if (lane == 1) {
+				SPR_GlowRight.GetComponent<SCR_Lane>().SetColor (minorGlobalColor[currentColorId], true, false);
+			}
+			
+			laneHighlight = lane;
+		}
 	}
 }

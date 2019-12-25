@@ -4,6 +4,8 @@ using UnityEngine;
 
 
 public class SCR_Cube : MonoBehaviour {
+	public static SCR_Cube instance;
+	
 	public GameObject PFB_Particle;
 	
 	public const float SIZE_Z = 3.2f;
@@ -19,6 +21,8 @@ public class SCR_Cube : MonoBehaviour {
 	public float y;
 	public float z;
 	
+	public Material[] MAT_Cube;
+	
 	
 	public float speedY = 0;
 	
@@ -27,6 +31,8 @@ public class SCR_Cube : MonoBehaviour {
     }
 	
 	public void Spawn() {
+		instance = this;
+		
 		if (Random.Range (-10, 10) > 0) {
 			x = -SPAWN_X;
 		}
@@ -51,7 +57,7 @@ public class SCR_Cube : MonoBehaviour {
 			if (y < 0) y = 0;
 		}
 		
-        z -= SCR_Action.SPEED_Z * dt * SCR_Action.instance.loseDelay;
+        z -= SCR_Action.SCROLL_SPEED * dt * SCR_Action.instance.loseDelay;
 		
 		transform.position = new Vector3(x, y, z);
 		
@@ -70,7 +76,7 @@ public class SCR_Cube : MonoBehaviour {
 				
 				GameObject tempParticle = SCR_Pool.GetFreeObject (PFB_Particle);
 				tempParticle.transform.position = transform.position;
-				tempParticle.GetComponent<SCR_Explosion>().SetColor (SCR_Action.instance.currentColor);
+				tempParticle.GetComponent<SCR_Explosion>().SetColor (SCR_Action.instance.majorColor);
 				
 				if (x < 0) {
 					tempParticle.transform.localEulerAngles = new Vector3(0, 20, 0);
@@ -81,4 +87,12 @@ public class SCR_Cube : MonoBehaviour {
 			}
 		}
     }
+	
+	public static void SetColor (Color color) {
+		if (instance != null) {
+			for (int i=0; i<instance.MAT_Cube.Length; i++) {
+				instance.MAT_Cube[i].SetColor("_Color", color); 
+			}
+		}
+	}
 }

@@ -7,6 +7,7 @@ public class SCR_Camera : MonoBehaviour {
 	
 	public static bool bloomEnabled = true;
 	
+	public GameObject SPR_Background;
 	public GameObject BTN_BloomOn;
 	public GameObject BTN_BloomOff;
 	
@@ -38,14 +39,15 @@ public class SCR_Camera : MonoBehaviour {
 		}
 		
 		Color color = new Color(
-			SCR_Action.instance.currentColor.r * currentColorMultiplier,
-			SCR_Action.instance.currentColor.g * currentColorMultiplier,
-			SCR_Action.instance.currentColor.b * currentColorMultiplier
+			SCR_Action.instance.majorColor.r * currentColorMultiplier,
+			SCR_Action.instance.majorColor.g * currentColorMultiplier,
+			SCR_Action.instance.majorColor.b * currentColorMultiplier
 		);
 		GetComponent<Camera>().backgroundColor = color;
 		RenderSettings.fogColor = color;
 		
-		SCR_Action.instance.ChangePlaneColor (SCR_Action.instance.currentColor);
+		color *= new Vector4(10, 10, 10, 1);
+		SPR_Background.GetComponent<SCR_Background>().SetColor (color);
     }
 	
 	public void ToggleBloom() {

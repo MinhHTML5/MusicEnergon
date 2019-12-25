@@ -2,11 +2,12 @@
     Properties {
         // Adds Color field we can modify
         _Color ("Main Color", Color) = (1, 1, 1, 1)        
-        _MainTex ("Base (RGB)", 2D) = "white" {}
+        _MainTex ("Base (RGB)", 2D) = "black" {}
     }
 
     SubShader {
-        Tags { "RenderType"="Opaque" }
+        Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
+		Blend SrcAlpha OneMinusSrcAlpha
         LOD 100
         
         Pass {
