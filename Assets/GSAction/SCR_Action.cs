@@ -13,7 +13,8 @@ public class SCR_Action : MonoBehaviour {
 
 	public const float 			SCROLL_SPEED = 15;
 	public const float 			COLOR_CHANGE_SPEED = 1.0f;
-	public const float 			BRICK_SPAWN_LATENCY = 1.0f;
+	public const float 			PEACE_TIME = 5.0f;
+	public const float 			BRICK_SPAWN_LATENCY = 2.0f;
 	public const float 			BRICK_BLOCK_LATENCY = 0.06f;
 	public const float 			MID_BRICK_CHANCE = 15;
 	
@@ -81,7 +82,7 @@ public class SCR_Action : MonoBehaviour {
 		spawnCount = 0;
 		spawnIndex = 0;
 		musicDelay = SCR_Cube.SPAWN_Z / SCROLL_SPEED - SCR_MusicData.instance.GetData()[0] + MUSIC_OFFSET;
-		brickCount = BRICK_SPAWN_LATENCY * 3;
+		brickCount = PEACE_TIME;
 		
 		colorShiftInterval = 0.5f;
 		
@@ -126,39 +127,62 @@ public class SCR_Action : MonoBehaviour {
 		
 			brickCount -= dt;
 			if (brickCount <= 0) {
-				float brickX = SCR_Brick.SPAWN_X;
 				
-				if (Random.Range(-10, 10) > 0) {
-					brickX = -brickX;
-				}
-				
-				bool spawn = true;
-				List<GameObject> cubes = SCR_Pool.GetObjectList(SCR_Action.instance.PFB_Cube);
-				for (int i=0; i<cubes.Count; i++) {
-					if (cubes[i].activeSelf) {
-						if (cubes[i].transform.position.z < SCR_Brick.SPAWN_Z + SCR_Cube.SIZE_Z * 1.5f
-						&&  cubes[i].transform.position.z > SCR_Brick.SPAWN_Z - SCR_Cube.SIZE_Z * 1.3f
-						&&  Mathf.Sign(cubes[i].transform.position.x) == Mathf.Sign(brickX)) {
-							spawn = false;
-							break;
+				if (Random.Range(0, 100) > MID_BRICK_CHANCE) {
+					float brickX = SCR_Brick.SPAWN_X;
+					
+					if (Random.Range(-10, 10) > 0) {
+						brickX = -brickX;
+					}
+					
+					bool spawn = true;
+					List<GameObject> cubes = SCR_Pool.GetObjectList(SCR_Action.instance.PFB_Cube);
+					for (int i=0; i<cubes.Count; i++) {
+						if (cubes[i].activeSelf) {
+							if (cubes[i].transform.position.z < SCR_Brick.SPAWN_Z + SCR_Cube.SIZE_Z * 1.5f
+							&&  cubes[i].transform.position.z > SCR_Brick.SPAWN_Z - SCR_Cube.SIZE_Z * 1.3f
+							&&  Mathf.Sign(cubes[i].transform.position.x) == Mathf.Sign(brickX)) {
+								spawn = false;
+								break;
+							}
 						}
 					}
-				}
-				
-				if (spawn == true) {
-					brickCount = BRICK_SPAWN_LATENCY;
-					if (Random.Range(0, 100) > MID_BRICK_CHANCE) {
+					
+					if (spawn == false) {
+						spawn = true;
+						brickX = -brickX;
+						for (int i=0; i<cubes.Count; i++) {
+							if (cubes[i].activeSelf) {
+								if (cubes[i].transform.position.z < SCR_Brick.SPAWN_Z + SCR_Cube.SIZE_Z * 1.5f
+								&&  cubes[i].transform.position.z > SCR_Brick.SPAWN_Z - SCR_Cube.SIZE_Z * 1.3f
+								&&  Mathf.Sign(cubes[i].transform.position.x) == Mathf.Sign(brickX)) {
+									spawn = false;
+									break;
+								}
+							}
+						}
+					}
+					
+					if (spawn == true) {
 						GameObject tempBrick = SCR_Pool.GetFreeObject (PFB_Brick);
 						tempBrick.GetComponent<SCR_Brick>().Spawn(brickX);
+						
+						float difficulty = 1.0f * spawnIndex / SCR_MusicData.instance.GetData().Length;
+						difficulty = 1 - difficulty * 0.75f;
+						brickCount = Random.Range(1, 2) * BRICK_SPAWN_LATENCY * difficulty;
 					}
 					else {
-						GameObject tempBrick = SCR_Pool.GetFreeObject (PFB_Brick_2);
-						tempBrick.GetComponent<SCR_Brick2>().Spawn();
+						brickCount = BRICK_BLOCK_LATENCY;
 					}
-					brickCount = BRICK_SPAWN_LATENCY;
 				}
 				else {
-					brickCount = BRICK_BLOCK_LATENCY;
+					GameObject tempBrick = SCR_Pool.GetFreeObject (PFB_Brick_2);
+					tempBrick.GetComponent<SCR_Brick2>().Spawn();
+					
+					float difficulty = 1.0f * spawnIndex / SCR_MusicData.instance.GetData().Length;
+					difficulty = 1 - difficulty * 0.75f;
+					brickCount = Random.Range(1, 2) * BRICK_SPAWN_LATENCY * difficulty;
+					
 				}
 			}
 		}
