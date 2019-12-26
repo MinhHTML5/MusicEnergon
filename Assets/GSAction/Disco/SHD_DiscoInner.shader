@@ -7,7 +7,7 @@
 	Category {
 		Tags {"Queue"="Transparent+101" "IgnoreProjector"="True"}
         Fog { Mode Off }
-		Blend OneMinusDstColor One
+		Blend SrcAlpha One
 	   
 		SubShader {
 			Pass {

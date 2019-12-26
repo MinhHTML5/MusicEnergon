@@ -23,9 +23,9 @@ public class SCR_Action : MonoBehaviour {
 	public GameObject 			PFB_Cube;
 	public GameObject 			PFB_Brick;
 	public GameObject 			PFB_Brick_2;
-	public GameObject 			PFB_Explosion;
+	public GameObject 			PFB_CubeExplosion;
 	
-	public GameObject 			MDL_DiscoBall;
+	public GameObject 			SPR_DiscoBall;
 	public GameObject 			SPR_GlowLeft;
 	public GameObject 			SPR_GlowMiddle;
 	public GameObject 			SPR_GlowRight;
@@ -229,12 +229,12 @@ public class SCR_Action : MonoBehaviour {
 		SCR_Plane.SetColor (majorColor);
 		SCR_Cube.SetColor (majorColor);
 		
-		MDL_DiscoBall.GetComponent<SCR_DiscoBall>().SetColor (majorColor);
+		SPR_DiscoBall.GetComponent<SCR_DiscoBall>().SetColor (majorColor);
 		ball.GetComponent<SCR_Ball>().SetColor (majorColor);
 		
-		List<GameObject> explosions = SCR_Pool.GetObjectList(PFB_Explosion);
+		List<GameObject> explosions = SCR_Pool.GetObjectList(PFB_CubeExplosion);
 		for (int i=0; i<explosions.Count; i++) {
-			explosions[i].GetComponent<SCR_Explosion>().SetColor (majorColor);
+			explosions[i].GetComponent<SCR_CubeExplosion>().SetColor (majorColor);
 		}
 		
 		SPR_GlowLeft.GetComponent<SCR_Lane>().SetColor (majorColor, minorColor);
@@ -251,6 +251,7 @@ public class SCR_Action : MonoBehaviour {
 	public void Score() {
 		score ++;
 		TXT_Score.text = "" + score;
+		SPR_DiscoBall.GetComponent<SCR_DiscoBall>().Expand();
 	}
 	
 	public void HighlightLane (int lane) {

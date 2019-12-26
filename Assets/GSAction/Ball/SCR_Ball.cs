@@ -22,7 +22,6 @@ public class SCR_Ball : MonoBehaviour {
 	public Material MAT_Ball;
 	public GameObject SPR_White;
 	public GameObject PAR_Trail;
-	public GameObject LGT_Light;
 	
 	public float x;
 	public float targetX;
@@ -40,36 +39,7 @@ public class SCR_Ball : MonoBehaviour {
     }
 	
 	public void SetColor (Color color) {
-		MAT_Ball.SetColor("_Color", color);
-
-		if (ps1 == null) {
-			ps1 = GetComponent<ParticleSystem>();
-			ps2 = PAR_Trail.GetComponent<ParticleSystem>();
-		}
-		
-		var main = ps1.main;
-		main.startColor = color;
-		main = ps2.main;
-		main.startColor = color;
-		
-		Gradient grad = new Gradient();
-        grad.SetKeys(
-			new GradientColorKey[] { 
-				new GradientColorKey(color, 0.0f), 
-				new GradientColorKey(color, 1.0f) 
-			}, 
-			new GradientAlphaKey[] { 
-				new GradientAlphaKey(0.3f, 0.0f), 
-				new GradientAlphaKey(0.0f, 1.0f) 
-			} 
-		);
-		
-		var col = ps1.colorOverLifetime;
-		col.color = grad;
-		col = ps2.colorOverLifetime;
-		col.color = grad;
-		
-		LGT_Light.GetComponent<Light>().color = color;
+	
 	}
 
     private void Update() {
@@ -178,32 +148,6 @@ public class SCR_Ball : MonoBehaviour {
 		if (live == true) {
 			GameObject tempParticle = SCR_Pool.GetFreeObject (PFB_Particle);
 			tempParticle.transform.position = transform.position;
-			tempParticle.GetComponent<SCR_Explosion>().SetColor (SCR_Action.instance.majorColor);
-			if (x < 0) {
-				tempParticle.transform.localEulerAngles = new Vector3(0, 30, 0);
-			}
-			else {
-				tempParticle.transform.localEulerAngles = new Vector3(0, -30, 0);
-			}
-			
-			var main = tempParticle.GetComponent<ParticleSystem>().main;
-			main.startColor = SCR_Action.instance.majorColor;
-			
-			Gradient grad = new Gradient();
-			grad.SetKeys(
-				new GradientColorKey[] { 
-					new GradientColorKey(SCR_Action.instance.majorColor, 0.0f), 
-					new GradientColorKey(SCR_Action.instance.majorColor, 1.0f) 
-				}, 
-				new GradientAlphaKey[] { 
-					new GradientAlphaKey(1.0f, 0.0f), 
-					new GradientAlphaKey(1.0f, 0.8f), 
-					new GradientAlphaKey(0.0f, 1.0f) 
-				} 
-			);
-			
-			var col = tempParticle.GetComponent<ParticleSystem>().colorOverLifetime;
-			col.color = grad;
 			
 			var emit = ps1.emission;
 			emit.rate = 0;

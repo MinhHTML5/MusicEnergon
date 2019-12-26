@@ -10,7 +10,7 @@ public class SCR_Background : MonoBehaviour {
     }
 
     private void Update() {
-        
+       
     }
 	
 	public void SetColor (Color color) {

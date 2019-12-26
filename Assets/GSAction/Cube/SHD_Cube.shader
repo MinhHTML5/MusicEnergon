@@ -6,7 +6,7 @@
 	}
 	 
 	Category {
-		Tags {"Queue"="Transparent+1" "IgnoreProjector"="True"}
+		Tags {"Queue"="Transparent-1" "IgnoreProjector"="True"}
 		ZWrite Off
 		Cull Off
 		Blend OneMinusDstColor One

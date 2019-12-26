@@ -6,7 +6,7 @@ using UnityEngine;
 public class SCR_Cube : MonoBehaviour {
 	public static SCR_Cube instance;
 	
-	public GameObject PFB_Particle;
+	public GameObject PFB_Explosion;
 	
 	public const float SIZE_Z = 3.2f;
 	public const float SIZE_X = 0.5f;
@@ -74,9 +74,9 @@ public class SCR_Cube : MonoBehaviour {
 				SCR_Camera.Brighten();
 				SCR_Action.instance.Score();
 				
-				GameObject tempParticle = SCR_Pool.GetFreeObject (PFB_Particle);
+				GameObject tempParticle = SCR_Pool.GetFreeObject (PFB_Explosion);
 				tempParticle.transform.position = transform.position;
-				tempParticle.GetComponent<SCR_Explosion>().SetColor (SCR_Action.instance.majorColor);
+				tempParticle.GetComponent<SCR_CubeExplosion>().SetColor (SCR_Action.instance.majorColor);
 				
 				if (x < 0) {
 					tempParticle.transform.localEulerAngles = new Vector3(0, 20, 0);

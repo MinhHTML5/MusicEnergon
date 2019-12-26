@@ -48,6 +48,7 @@ public class SCR_Camera : MonoBehaviour {
 		
 		color *= new Vector4(5, 5, 5, 1);
 		SPR_Background.GetComponent<SCR_Background>().SetColor (color);
+		RenderSettings.ambientLight = color;
     }
 	
 	public void ToggleBloom() {
