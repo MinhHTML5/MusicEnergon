@@ -46,7 +46,7 @@ public class SCR_Camera : MonoBehaviour {
 		GetComponent<Camera>().backgroundColor = color;
 		RenderSettings.fogColor = color;
 		
-		color *= new Vector4(10, 10, 10, 1);
+		color *= new Vector4(5, 5, 5, 1);
 		SPR_Background.GetComponent<SCR_Background>().SetColor (color);
     }
 	
