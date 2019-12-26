@@ -87,9 +87,10 @@ public class SCR_Action : MonoBehaviour {
 		
 		PickRandomColor(true);
 		
-		SPR_GlowLeft.GetComponent<SCR_Lane>().SetColor (majorColor, false, true);
-		SPR_GlowMiddle.GetComponent<SCR_Lane>().SetColor (minorColor, true, true);
-		SPR_GlowRight.GetComponent<SCR_Lane>().SetColor (majorColor, false, true);
+		SPR_GlowLeft.GetComponent<SCR_Lane>().SetColor (majorColor, minorColor);
+		SPR_GlowMiddle.GetComponent<SCR_Lane>().SetColor (majorColor, minorColor);
+		SPR_GlowRight.GetComponent<SCR_Lane>().SetColor (majorColor, minorColor);
+		SPR_GlowMiddle.GetComponent<SCR_Lane>().SetHighlight (true);
 		
 		ApplyColor();
 		
@@ -190,22 +191,6 @@ public class SCR_Action : MonoBehaviour {
 			if (colorShiftInterval > 18.28f) {
 				colorShiftInterval -= 18.28f;
 				PickRandomColor(false);
-				
-				if (laneHighlight == -1) {
-					SPR_GlowLeft.GetComponent<SCR_Lane>().SetColor (minorGlobalColor[currentColorId], true, false);
-					SPR_GlowMiddle.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
-					SPR_GlowRight.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
-				}
-				else if (laneHighlight == 0) {
-					SPR_GlowLeft.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
-					SPR_GlowMiddle.GetComponent<SCR_Lane>().SetColor (minorGlobalColor[currentColorId], true, false);
-					SPR_GlowRight.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
-				}
-				else if (laneHighlight == 1) {
-					SPR_GlowLeft.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
-					SPR_GlowMiddle.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
-					SPR_GlowRight.GetComponent<SCR_Lane>().SetColor (minorGlobalColor[currentColorId], true, false);
-				}
 			}
 		}
 		
@@ -251,6 +236,10 @@ public class SCR_Action : MonoBehaviour {
 		for (int i=0; i<explosions.Count; i++) {
 			explosions[i].GetComponent<SCR_Explosion>().SetColor (majorColor);
 		}
+		
+		SPR_GlowLeft.GetComponent<SCR_Lane>().SetColor (majorColor, minorColor);
+		SPR_GlowMiddle.GetComponent<SCR_Lane>().SetColor (majorColor, minorColor);
+		SPR_GlowRight.GetComponent<SCR_Lane>().SetColor (majorColor, minorColor);
 	}
 	
 	
@@ -267,23 +256,23 @@ public class SCR_Action : MonoBehaviour {
 	public void HighlightLane (int lane) {
 		if (laneHighlight != lane) {
 			if (laneHighlight == -1) {
-				SPR_GlowLeft.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
+				SPR_GlowLeft.GetComponent<SCR_Lane>().SetHighlight(false);
 			}
 			else if (laneHighlight == 0) {
-				SPR_GlowMiddle.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
+				SPR_GlowMiddle.GetComponent<SCR_Lane>().SetHighlight(false);
 			}
 			else if (laneHighlight == 1) {
-				SPR_GlowRight.GetComponent<SCR_Lane>().SetColor (majorGlobalColor[currentColorId], false, false);
+				SPR_GlowRight.GetComponent<SCR_Lane>().SetHighlight(false);
 			}
 			
 			if (lane == -1) {
-				SPR_GlowLeft.GetComponent<SCR_Lane>().SetColor (minorGlobalColor[currentColorId], true, false);
+				SPR_GlowLeft.GetComponent<SCR_Lane>().SetHighlight(true);
 			}
 			else if (lane == 0) {
-				SPR_GlowMiddle.GetComponent<SCR_Lane>().SetColor (minorGlobalColor[currentColorId], true, false);
+				SPR_GlowMiddle.GetComponent<SCR_Lane>().SetHighlight(true);
 			}
 			else if (lane == 1) {
-				SPR_GlowRight.GetComponent<SCR_Lane>().SetColor (minorGlobalColor[currentColorId], true, false);
+				SPR_GlowRight.GetComponent<SCR_Lane>().SetHighlight(true);
 			}
 			
 			laneHighlight = lane;
