@@ -4,13 +4,14 @@ using UnityEngine;
 
 
 public class SCR_Brick : MonoBehaviour {
-	public const float SIZE_Z = 3.2f;
-	public const float SIZE_X = 0.5f;
+	public const float SIZE_Z = 0.75f;
+	public const float SIZE_X = 0.75f;
 	
-	public const float SPAWN_Z = 60;
+	public const float SPAWN_X = 1.5f;
+	public const float SPAWN_Z = 65;
 	public const float SPAWN_Y = 10;
 	public const float GRAVITY = 100;
-	public const float SPAWN_X = 3.5f;
+	
 	
 	public float x;
 	public float y;
@@ -53,8 +54,8 @@ public class SCR_Brick : MonoBehaviour {
 		
 		if (SCR_Action.instance.lose == false) {
 			Transform ball = SCR_Action.instance.ball.transform;
-			if (ball.position.z < transform.position.z + SIZE_Z && ball.position.z > transform.position.z - SIZE_Z * 0.4f
-			&&  ball.position.x < transform.position.x + SIZE_X && ball.position.x > transform.position.x - SIZE_X * 0.4f) {
+			if (ball.position.z < transform.position.z + SIZE_Z * 1.0f && ball.position.z > transform.position.z - SIZE_Z * 1.0f
+			&&  ball.position.x < transform.position.x + SIZE_X * 1.0f && ball.position.x > transform.position.x - SIZE_X * 1.0f) {
 				ball.gameObject.GetComponent<SCR_Ball>().Die();
 				SCR_Action.instance.lose = true;
 			}

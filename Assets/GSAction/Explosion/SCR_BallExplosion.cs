@@ -13,7 +13,7 @@ public class SCR_BallExplosion : MonoBehaviour {
 		float y = transform.position.y;
 		float z = transform.position.z;
 		
-        z -= SCR_Action.SCROLL_SPEED * dt;
+        z -= SCR_Action.SCROLL_SPEED * dt * 0.5f;
 		
 		transform.position = new Vector3(x, y, z);
     }

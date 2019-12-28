@@ -6,12 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class SCR_Action : MonoBehaviour {
 #if UNITY_WEBGL
-	public const float 			MUSIC_OFFSET = 0.1f;
+	public const float 			MUSIC_OFFSET = 0.3;
 #else
-	public const float 			MUSIC_OFFSET = 0.0f;
+	public const float 			MUSIC_OFFSET = 0.2f;
 #endif
 
-	public const float 			SCROLL_SPEED = 15;
+	public const float 			SCROLL_SPEED = 20;
 	public const float 			COLOR_CHANGE_SPEED = 1.0f;
 	public const float 			PEACE_TIME = 5.0f;
 	public const float 			BRICK_SPAWN_LATENCY = 2.0f;
@@ -23,10 +23,8 @@ public class SCR_Action : MonoBehaviour {
 	public GameObject 			PFB_Plane;
 	public GameObject 			PFB_Cube;
 	public GameObject 			PFB_Brick;
-	public GameObject 			PFB_Brick_2;
 	public GameObject 			PFB_CubeExplosion;
 	
-	public GameObject 			SPR_DiscoBall;
 	public GameObject 			SPR_GlowLeft;
 	public GameObject 			SPR_GlowMiddle;
 	public GameObject 			SPR_GlowRight;
@@ -70,14 +68,6 @@ public class SCR_Action : MonoBehaviour {
 #if UNITY_STANDALONE_WIN
 		Screen.SetResolution(540, 960, false);
 #endif
-		
-		/*
-		// Create 4 planes
-		for (int i=0; i<SCR_Plane.PLANE_NUMBER; i++) {
-			GameObject plane = SCR_Pool.GetFreeObject (PFB_Plane);
-			plane.GetComponent<SCR_Plane>().Spawn (i);
-		}
-		*/
 		
 		spawnCount = 0;
 		spawnIndex = 0;
@@ -127,62 +117,39 @@ public class SCR_Action : MonoBehaviour {
 		
 			brickCount -= dt;
 			if (brickCount <= 0) {
+				float brickX = 0;
+				int random = Random.Range (0, 99);
+				if (random % 3 == 0) {
+					brickX = -SCR_Brick.SPAWN_X;
+				}
+				else if (random % 3 == 1) {
+					brickX = 0;
+				}
+				else if (random % 3 == 2) {
+					brickX = SCR_Brick.SPAWN_X;
+				}
 				
-				if (Random.Range(0, 100) > MID_BRICK_CHANCE) {
-					float brickX = SCR_Brick.SPAWN_X;
-					
-					if (Random.Range(-10, 10) > 0) {
-						brickX = -brickX;
-					}
-					
-					bool spawn = true;
-					List<GameObject> cubes = SCR_Pool.GetObjectList(SCR_Action.instance.PFB_Cube);
-					for (int i=0; i<cubes.Count; i++) {
-						if (cubes[i].activeSelf) {
-							if (cubes[i].transform.position.z < SCR_Brick.SPAWN_Z + SCR_Cube.SIZE_Z * 1.5f
-							&&  cubes[i].transform.position.z > SCR_Brick.SPAWN_Z - SCR_Cube.SIZE_Z * 1.3f
-							&&  Mathf.Sign(cubes[i].transform.position.x) == Mathf.Sign(brickX)) {
-								spawn = false;
-								break;
-							}
+				bool spawn = true;
+				List<GameObject> cubes = SCR_Pool.GetObjectList(SCR_Action.instance.PFB_Cube);
+				for (int i=0; i<cubes.Count; i++) {
+					if (cubes[i].activeSelf) {
+						if (cubes[i].transform.position.x < brickX + SCR_Cube.SIZE_X
+						&&  cubes[i].transform.position.x > brickX - SCR_Cube.SIZE_X
+						&&  cubes[i].transform.position.z < SCR_Brick.SPAWN_Z + SCR_Cube.SIZE_Z * 10
+						&&  cubes[i].transform.position.z > SCR_Brick.SPAWN_Z - SCR_Cube.SIZE_Z * 10) {
+							spawn = false;
+							break;
 						}
-					}
-					
-					if (spawn == false) {
-						spawn = true;
-						brickX = -brickX;
-						for (int i=0; i<cubes.Count; i++) {
-							if (cubes[i].activeSelf) {
-								if (cubes[i].transform.position.z < SCR_Brick.SPAWN_Z + SCR_Cube.SIZE_Z * 1.5f
-								&&  cubes[i].transform.position.z > SCR_Brick.SPAWN_Z - SCR_Cube.SIZE_Z * 1.3f
-								&&  Mathf.Sign(cubes[i].transform.position.x) == Mathf.Sign(brickX)) {
-									spawn = false;
-									break;
-								}
-							}
-						}
-					}
-					
-					if (spawn == true) {
-						GameObject tempBrick = SCR_Pool.GetFreeObject (PFB_Brick);
-						tempBrick.GetComponent<SCR_Brick>().Spawn(brickX);
-						
-						float difficulty = 1.0f * spawnIndex / SCR_MusicData.instance.GetData().Length;
-						difficulty = 1 - difficulty * 0.75f;
-						brickCount = Random.Range(1, 2) * BRICK_SPAWN_LATENCY * difficulty;
-					}
-					else {
-						brickCount = BRICK_BLOCK_LATENCY;
 					}
 				}
-				else {
-					GameObject tempBrick = SCR_Pool.GetFreeObject (PFB_Brick_2);
-					tempBrick.GetComponent<SCR_Brick2>().Spawn();
+				
+				if (spawn == true) {
+					GameObject tempBrick = SCR_Pool.GetFreeObject (PFB_Brick);
+					tempBrick.GetComponent<SCR_Brick>().Spawn(brickX);
 					
 					float difficulty = 1.0f * spawnIndex / SCR_MusicData.instance.GetData().Length;
 					difficulty = 1 - difficulty * 0.75f;
 					brickCount = Random.Range(1, 2) * BRICK_SPAWN_LATENCY * difficulty;
-					
 				}
 			}
 		}
@@ -253,7 +220,6 @@ public class SCR_Action : MonoBehaviour {
 		SCR_Plane.SetColor (majorColor);
 		SCR_Cube.SetColor (majorColor);
 		
-		SPR_DiscoBall.GetComponent<SCR_DiscoBall>().SetColor (majorColor);
 		ball.GetComponent<SCR_Ball>().SetColor (majorColor);
 		
 		List<GameObject> explosions = SCR_Pool.GetObjectList(PFB_CubeExplosion);
@@ -275,7 +241,6 @@ public class SCR_Action : MonoBehaviour {
 	public void Score() {
 		score ++;
 		TXT_Score.text = "" + score;
-		SPR_DiscoBall.GetComponent<SCR_DiscoBall>().Expand();
 	}
 	
 	public void HighlightLane (int lane) {

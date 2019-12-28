@@ -1,7 +1,7 @@
 ﻿Shader "Custom/CubeParticle" {
 	Properties {
 		_MainTex ("Particle Texture", 2D) = "white" {}
-		_HighlightTex ("Highlight Texture", 2D) = "white" {}
+		_HighlightTex ("Highlight Texture", 2D) = "black" {}
 	}
 
 	Category {
