@@ -120,6 +120,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &19554576
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 19554578}
+  - component: {fileID: 19554577}
+  m_Layer: 0
+  m_Name: SCR_LightSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &19554577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 19554576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a69b5c8d3c3b154a9980ecd639f87c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PFB_LightRay: {fileID: 8424739461027868271, guid: 5aebb972e7febae45b8c0ea6a40bef0e,
+    type: 3}
+  MAT_LightRay: {fileID: 2100000, guid: 42dfff50e321ee74e97a862b429f02c1, type: 2}
+--- !u!4 &19554578
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 19554576}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &64844949
 GameObject:
   m_ObjectHideFlags: 0
@@ -4816,7 +4862,7 @@ MonoBehaviour:
   PAR_Trail: {fileID: 4337943553731891096}
   x: 0
   targetX: 0
-  lane: 0
+  attacking: 0
 --- !u!199 &64844952
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -5987,17 +6033,17 @@ PrefabInstance:
     - target: {fileID: -4388907986866236946, guid: 7f6696708903b164f93ecb01989cd310,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 78.46639
+      value: 89.94273
       objectReference: {fileID: 0}
     - target: {fileID: -4388907986866236946, guid: 7f6696708903b164f93ecb01989cd310,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -77.33149
+      value: 85.23944
       objectReference: {fileID: 0}
     - target: {fileID: -4388907986866236946, guid: 7f6696708903b164f93ecb01989cd310,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -146.3466
+      value: -19.47829
       objectReference: {fileID: 0}
     - target: {fileID: -4388907986866236946, guid: 7f6696708903b164f93ecb01989cd310,
         type: 3}
@@ -6092,17 +6138,17 @@ PrefabInstance:
     - target: {fileID: 2558221406901826104, guid: 7f6696708903b164f93ecb01989cd310,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -51.385574
+      value: -89.92356
       objectReference: {fileID: 0}
     - target: {fileID: 2558221406901826104, guid: 7f6696708903b164f93ecb01989cd310,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -116.196266
+      value: 189.88266
       objectReference: {fileID: 0}
     - target: {fileID: 2558221406901826104, guid: 7f6696708903b164f93ecb01989cd310,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -7.6291823
+      value: 30.567085
       objectReference: {fileID: 0}
     - target: {fileID: 2558221406901826104, guid: 7f6696708903b164f93ecb01989cd310,
         type: 3}
@@ -11561,6 +11607,8 @@ MonoBehaviour:
     type: 3}
   PFB_Cube: {fileID: 984850721474310875, guid: 3e54a748abf9a134e9d753e44c891a85, type: 3}
   PFB_Brick: {fileID: 1721378945124459563, guid: 406c313c86acf7a4cb8576c09171bd05,
+    type: 3}
+  PFB_Brick_2: {fileID: 1721378945124459563, guid: 0f500605399cc214e9e49d724f454177,
     type: 3}
   PFB_CubeExplosion: {fileID: 7947904250227269364, guid: 6e715bb899851fe46be84c71dd3aaf1f,
     type: 3}
