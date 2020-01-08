@@ -29,6 +29,7 @@ public class SCR_Action : MonoBehaviour {
 	public GameObject 			SPR_GlowLeft;
 	public GameObject 			SPR_GlowMiddle;
 	public GameObject 			SPR_GlowRight;
+	public GameObject 			MDL_DiscoBall;
 	public GameObject 			CTN_Replay;
 	public GameObject 			IMG_Tutorial;
 	public AudioSource 			SND_Music;
@@ -253,6 +254,7 @@ public class SCR_Action : MonoBehaviour {
 		SPR_GlowRight.GetComponent<SCR_Lane>().SetColor (majorColor, minorColor);
 		
 		SCR_LightSpawner.SetColor (majorColor);
+		MDL_DiscoBall.GetComponent<SCR_DiscoBall>().SetColor (minorColor);
 	}
 	
 	
