@@ -114,6 +114,7 @@ public class SCR_Ball : MonoBehaviour {
 					}
 				}
 				
+				/*
 				List<GameObject> bricks = SCR_Pool.GetObjectList(SCR_Action.instance.PFB_Brick);
 				for (int i=0; i<bricks.Count; i++) {
 					if (bricks[i].activeSelf) {
@@ -132,6 +133,7 @@ public class SCR_Ball : MonoBehaviour {
 						}
 					}
 				}
+				*/
 				
 				var emit = psTrail.emission;
 				emit.rate = trailDefaultEmitRate;

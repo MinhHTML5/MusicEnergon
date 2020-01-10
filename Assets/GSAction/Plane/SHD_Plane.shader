@@ -4,19 +4,23 @@
 		_MainTex ("Transparent, will change color", 2D) = ""
 	}
 	 
-	Category {
-		Tags {"Queue"="Transparent-10" "IgnoreProjector"="True"}
-        Fog { Mode Off }
+	SubShader {
+		Tags {"Queue"="Transparent-10" "IgnoreProjector"="True" "RenderType"="Transparent" }
+		Blend SrcAlpha OneMinusSrcAlpha
 		ZWrite Off
         ZTest Always
-		Blend SrcAlpha OneMinusSrcAlpha
-	   
-		SubShader {
-			Pass {
-				SetTexture[_MainTex] {
-					combine texture * constant ConstantColor[_Color]
-				}
-			}
-		}
+        LOD 100
+        
+        Pass {
+            Lighting Off
+            
+            SetTexture [_MainTex] { 
+                // Sets our color as the 'constant' variable
+                constantColor [_Color]
+                
+                // Multiplies color (in constant) with texture
+                combine constant * texture
+            }
+        }
 	}
 }
