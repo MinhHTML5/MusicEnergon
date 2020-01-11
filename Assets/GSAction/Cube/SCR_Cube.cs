@@ -22,7 +22,7 @@ public class SCR_Cube : MonoBehaviour {
 	public float z;
 	
 	public Material[] MAT_Cube;
-	
+	public GameObject PFB_Cue;
 	
 	public float speedY = 0;
 	
@@ -30,7 +30,7 @@ public class SCR_Cube : MonoBehaviour {
         
     }
 	
-	public void Spawn() {
+	public void Spawn(bool withCue) {
 		instance = this;
 		
 		if (Random.Range (-10, 10) > 0) {
@@ -45,6 +45,11 @@ public class SCR_Cube : MonoBehaviour {
 		speedY = 0;
 		
 		transform.position = new Vector3(x, y, z);
+		
+		if (withCue) {
+			GameObject cue = SCR_Pool.GetFreeObject(PFB_Cue);
+			cue.GetComponent<SCR_Cue>().Spawn (gameObject);
+		}
 	}
 
     private void Update() {

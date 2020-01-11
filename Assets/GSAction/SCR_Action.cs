@@ -109,7 +109,12 @@ public class SCR_Action : MonoBehaviour {
 			if (spawnCount >= SCR_MusicData.instance.GetData()[spawnIndex]) {
 				spawnIndex ++;
 				GameObject tempCube = SCR_Pool.GetFreeObject (PFB_Cube);
-				tempCube.GetComponent<SCR_Cube>().Spawn();
+				if (spawnIndex < 3) {
+					tempCube.GetComponent<SCR_Cube>().Spawn(true);
+				}
+				else {
+					tempCube.GetComponent<SCR_Cube>().Spawn(false);
+				}
 				SCR_ProgressBar.instance.SetProgress (1.0f * spawnIndex / SCR_MusicData.instance.GetData().Length);
 			}
 		
