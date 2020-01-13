@@ -9,7 +9,7 @@ public class SCR_Ball : MonoBehaviour {
 	public GameObject PFB_Particle;
 	
 	public const float CONTROL_AMPLIFIER = 8;
-	public const float SPEED_X_MULTIPLIER = 0.3f;
+	public const float SPEED_X_MULTIPLIER = 0.12f;
 	public const float MAX_X = 0.7f;
 	public const float ATTACK_X = 3.2f;
 	public const float MIN_STEP = 0.001f;
