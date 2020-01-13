@@ -20,7 +20,6 @@ public class SCR_Action : MonoBehaviour {
 	
 	public static SCR_Action 	instance;
 	
-	public GameObject 			PFB_Plane;
 	public GameObject 			PFB_Cube;
 	public GameObject 			PFB_Brick;
 	public GameObject 			PFB_CubeExplosion;
@@ -109,7 +108,7 @@ public class SCR_Action : MonoBehaviour {
 			if (spawnCount >= SCR_MusicData.instance.GetData()[spawnIndex]) {
 				spawnIndex ++;
 				GameObject tempCube = SCR_Pool.GetFreeObject (PFB_Cube);
-				if (spawnIndex < 3) {
+				if (spawnIndex <= 3) {
 					tempCube.GetComponent<SCR_Cube>().Spawn(true);
 				}
 				else {
@@ -249,6 +248,8 @@ public class SCR_Action : MonoBehaviour {
 		SCR_LightSpawner.SetColor (majorColor);
 		//MDL_DiscoBall.GetComponent<SCR_DiscoBall>().SetColor (minorColor);
 		MDL_DiscoBall.GetComponent<SCR_DiscoBall>().SetColor (majorColor);
+		
+		SCR_Cue.SetColor (majorColor);
 	}
 	
 	
